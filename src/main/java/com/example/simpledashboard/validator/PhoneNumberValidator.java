@@ -6,6 +6,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Pattern;
 
+// 언젠간 사용하게 예시로 일단 만들어놓음
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
 
     private String regexp;

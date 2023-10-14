@@ -9,6 +9,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+// 언젠간 사용하게 예시로 일단 만들어놓음
 // 직접 annotation 생성하여 PhoneNumber Validation 하기
 @Constraint(validatedBy = {PhoneNumberValidator.class})
 @Target({ElementType.FIELD})
