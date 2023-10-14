@@ -1,5 +1,7 @@
 package com.example.simpledashboard.post.db;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,5 +13,5 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
     public Optional<PostEntity> findFirstByIdAndStatusOrderByIdDesc(Long id, String status);
 
     // select * from post where board_id = ?? AND status = ?? order by posted_at desc
-    public List<PostEntity> findAllByBoardIdAndStatusOrderByPostedAtDesc(Long boardId, String status);
+    public Page<PostEntity> findAllByBoardIdAndStatusOrderByPostedAtDesc(Pageable pageable, Long boardId, String status);
 }

@@ -29,6 +29,9 @@ public class BoardEntity {
     @OneToMany(
             mappedBy = "board"
     )
+    @Builder.Default
+//    @Where(clause = "status = 'REGISTERED'") // where annotation으로 필터링 가능하다.
+//    @org.hibernate.annotations.OrderBy(clause = "id desc")
     private List<PostEntity> postList = List.of();
 
 }

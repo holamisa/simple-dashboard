@@ -1,6 +1,8 @@
 package com.example.simpledashboard.post.service;
 
 import com.example.simpledashboard.board.db.BoardRepository;
+import com.example.simpledashboard.common.Api;
+import com.example.simpledashboard.common.Pagination;
 import com.example.simpledashboard.post.db.PostEntity;
 import com.example.simpledashboard.post.db.PostRepository;
 import com.example.simpledashboard.post.model.Post;
@@ -8,6 +10,8 @@ import com.example.simpledashboard.post.model.PostDTO;
 import com.example.simpledashboard.post.model.PostView;
 import com.example.simpledashboard.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -65,13 +69,24 @@ public class PostService {
         return postConverter.toDto(entity);
     }
 
-    public List<PostDTO> all(
+    public Api<List<PostDTO>> all(
+            Pageable pageable,
             Long boardId
     ){
-        return postRepository.findAllByBoardIdAndStatusOrderByPostedAtDesc(boardId,"REGISTERED")
-                .stream()
-                .map(postConverter::toDto)
-                .collect(Collectors.toList());
+        var list = postConverter.toDto(postRepository.findAllByBoardIdAndStatusOrderByPostedAtDesc(pageable, boardId,"REGISTERED"));
+
+        var pagination = Pagination.builder()
+                .page(list.getNumber())
+                .size(list.getSize())
+                .currentElements(list.getNumberOfElements())
+                .totalElements(list.getTotalElements())
+                .totalPage(list.getTotalPages())
+                .build();
+
+        return Api.<List<PostDTO>>builder()
+                .body(list.toList())
+                .pagination(pagination)
+                .build();
     }
 
     // 1. 게시글 존재?

@@ -4,6 +4,7 @@ import com.example.simpledashboard.board.db.BoardEntity;
 import com.example.simpledashboard.reply.db.ReplyEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -52,5 +53,8 @@ public class PostEntity {
     @OneToMany(
             mappedBy = "post"
     )
+    @Builder.Default
+//    @Where(clause = "status = 'REGISTERED'") // where annotation으로 필터링 가능하다.
+//    @org.hibernate.annotations.OrderBy(clause = "id desc")
     private List<ReplyEntity> replyList = List.of();
 }
