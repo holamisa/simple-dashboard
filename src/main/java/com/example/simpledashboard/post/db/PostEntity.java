@@ -1,6 +1,8 @@
 package com.example.simpledashboard.post.db;
 
+import com.example.simpledashboard.board.db.BoardEntity;
 import com.example.simpledashboard.reply.db.ReplyEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,8 +23,10 @@ public class PostEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "board_id", nullable = false)
-    private Long boardId;
+    @ManyToOne
+    @JsonIgnore
+    @ToString.Exclude
+    private BoardEntity board; // 해당 변수는 시스템에서 자동으로 _id 추가해줌
 
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
@@ -45,6 +49,8 @@ public class PostEntity {
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
 
-    @Transient // 컬럼으로 인식 X
+    @OneToMany(
+            mappedBy = "post"
+    )
     private List<ReplyEntity> replyList = List.of();
 }

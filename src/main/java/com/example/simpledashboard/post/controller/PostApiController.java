@@ -2,6 +2,7 @@ package com.example.simpledashboard.post.controller;
 
 import com.example.simpledashboard.post.db.PostEntity;
 import com.example.simpledashboard.post.model.Post;
+import com.example.simpledashboard.post.model.PostDTO;
 import com.example.simpledashboard.post.model.PostView;
 import com.example.simpledashboard.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class PostApiController {
     private final PostService postService;
 
     @PostMapping("/add")
-    public PostEntity create(
+    public PostDTO create(
             @Valid
             @RequestBody
             Post post
@@ -27,7 +28,7 @@ public class PostApiController {
     }
 
     @PostMapping("/view")
-    public PostEntity view(
+    public PostDTO view(
             @Valid
             @RequestBody
             PostView postView
@@ -36,7 +37,7 @@ public class PostApiController {
     }
 
     @GetMapping("/all/{boardId}")
-    public List<PostEntity> list(
+    public List<PostDTO> list(
             @PathVariable long boardId
     ){
         return postService.all(boardId);

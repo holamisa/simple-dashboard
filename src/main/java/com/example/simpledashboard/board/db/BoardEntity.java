@@ -1,15 +1,17 @@
 package com.example.simpledashboard.board.db;
 
+import com.example.simpledashboard.post.db.PostEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
+@Builder
 @Entity(name = "board")
 public class BoardEntity {
 
@@ -22,5 +24,11 @@ public class BoardEntity {
 
     @Column(name = "status", nullable = false, length = 50)
     private String status;
+
+    // 1:N 관계
+    @OneToMany(
+            mappedBy = "board"
+    )
+    private List<PostEntity> postList = List.of();
 
 }

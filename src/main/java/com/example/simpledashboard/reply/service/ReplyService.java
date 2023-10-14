@@ -1,5 +1,6 @@
 package com.example.simpledashboard.reply.service;
 
+import com.example.simpledashboard.post.db.PostRepository;
 import com.example.simpledashboard.reply.db.ReplyEntity;
 import com.example.simpledashboard.reply.db.ReplyRepository;
 import com.example.simpledashboard.reply.model.Reply;
@@ -15,12 +16,18 @@ import java.util.List;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final PostRepository postRepository;
 
     public ReplyEntity create(
             Reply reply
     ){
+        var postEntity = postRepository.findById(reply.getPostId());
+        if(postEntity.isEmpty()){
+            throw new RuntimeException("게시물이 존재하지 않습니다.");
+        }
+
         var entity = ReplyEntity.builder()
-                .postId(reply.getPostId())
+                .post(postEntity.get())
                 .userName(reply.getUserName())
                 .password(reply.getPassword())
                 .status("REGISTERED")

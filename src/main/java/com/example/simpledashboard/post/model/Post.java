@@ -20,7 +20,7 @@ import javax.validation.constraints.Size;
 public class Post {
 
     @NotNull
-    private Long boardId;
+    private Long boardId = 1L;
 
     @NotBlank
     private String userName;
