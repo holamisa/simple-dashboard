@@ -8,15 +8,14 @@ import com.example.simpledashboard.post.db.PostRepository;
 import com.example.simpledashboard.post.model.Post;
 import com.example.simpledashboard.post.model.PostDTO;
 import com.example.simpledashboard.post.model.PostView;
-import com.example.simpledashboard.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +23,9 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final BoardRepository boardRepository;
-    private final ReplyService replyService;
     private final PostConverter postConverter;
 
-    public PostDTO create(
+    public Api<PostDTO> create(
             Post post
     ){
         var boardEntity = boardRepository.findById(post.getBoardId());
@@ -48,12 +46,16 @@ public class PostService {
 
         var saveEntity = postRepository.save(entity);
 
-        return postConverter.toDto(saveEntity);
+        return Api.<PostDTO>builder()
+                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultMessage(HttpStatus.OK.getReasonPhrase())
+                .data(postConverter.toDto(saveEntity))
+                .build();
     }
     // 1. 게시글 존재?
     // 2. 비밀번호 일치?
     // 3. 해당 댓글에 대한 답변 리스트 조회
-    public PostDTO view(
+    public Api<PostDTO> view(
             PostView postView
     ){
         var entity = postRepository.findFirstByIdAndStatusOrderByIdDesc(postView.getPostId(), "REGISTERED")
@@ -66,7 +68,11 @@ public class PostService {
                 })
                 .orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
 
-        return postConverter.toDto(entity);
+        return Api.<PostDTO>builder()
+                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultMessage(HttpStatus.OK.getReasonPhrase())
+                .data(postConverter.toDto(entity))
+                .build();
     }
 
     public Api<List<PostDTO>> all(
@@ -84,7 +90,9 @@ public class PostService {
                 .build();
 
         return Api.<List<PostDTO>>builder()
-                .body(list.toList())
+                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultMessage(HttpStatus.OK.getReasonPhrase())
+                .data(list.toList())
                 .pagination(pagination)
                 .build();
     }
@@ -92,13 +100,13 @@ public class PostService {
     // 1. 게시글 존재?
     // 2. 비밀번호 일치?
     // 3. 등록 --> 미등록 변경
-    public void delete(
+    public Api delete(
             PostView postView
     ){
         postRepository.findById(postView.getPostId())
                 .map(x -> {
                     if(!x.getPassword().equals(postView.getPassword())){
-                        throw new RuntimeException("패스워드가 일치 하지 않습니다.");
+                        throw new ValidationException("패스워드가 일치 하지 않습니다.");
                     }
 
                     x.setStatus("UNREGISTERED");
@@ -106,5 +114,10 @@ public class PostService {
                     return x;
                 })
                 .orElseThrow(() -> new RuntimeException("해당 게시글이 존재하지 않습니다."));
+
+        return Api.builder()
+                .resultCode(String.valueOf(HttpStatus.OK.value()))
+                .resultMessage(HttpStatus.OK.getReasonPhrase())
+                .build();
     }
 }

@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 public class Reply {
 
     @NotNull
-    private Long postId;
+    private Long postId = 1L;
 
     @NotBlank
     private String userName;

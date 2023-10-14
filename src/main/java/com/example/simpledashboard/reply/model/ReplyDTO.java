@@ -1,6 +1,5 @@
 package com.example.simpledashboard.reply.model;
 
-import com.example.simpledashboard.post.db.PostEntity;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;

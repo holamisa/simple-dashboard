@@ -7,7 +7,6 @@ import com.example.simpledashboard.post.model.PostView;
 import com.example.simpledashboard.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +21,7 @@ public class PostApiController {
     private final PostService postService;
 
     @PostMapping("/add")
-    public PostDTO create(
+    public Api<PostDTO> create(
             @Valid
             @RequestBody
             Post post
@@ -31,7 +30,7 @@ public class PostApiController {
     }
 
     @PostMapping("/view")
-    public PostDTO view(
+    public Api<PostDTO> view(
             @Valid
             @RequestBody
             PostView postView
@@ -50,11 +49,11 @@ public class PostApiController {
     }
 
     @PostMapping("/delete")
-    public void delete(
+    public Api delete(
             @Valid
             @RequestBody
             PostView postView
     ){
-        postService.delete(postView);
+        return postService.delete(postView);
     }
 }
