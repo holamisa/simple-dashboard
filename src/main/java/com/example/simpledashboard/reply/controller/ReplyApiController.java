@@ -1,17 +1,18 @@
 package com.example.simpledashboard.reply.controller;
 
-import com.example.simpledashboard.reply.db.ReplyEntity;
+import com.example.simpledashboard.common.Api;
 import com.example.simpledashboard.reply.model.Reply;
 import com.example.simpledashboard.reply.model.ReplyDTO;
 import com.example.simpledashboard.reply.model.ReplyView;
 import com.example.simpledashboard.reply.service.ReplyConverter;
 import com.example.simpledashboard.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/reply")
@@ -22,30 +23,28 @@ public class ReplyApiController {
     private final ReplyConverter replyConverter;
 
     @PostMapping("/add")
-    public ReplyDTO create(
+    public Api<ReplyDTO> create(
             @Valid
             @RequestBody
             Reply reply
     ){
-        var saveEntity = replyService.create(reply);
-
-        return replyConverter.toDto(saveEntity);
+        return replyService.create(reply);
     }
 
     @GetMapping("/post/{postId}")
-    public List<ReplyDTO> findAllByPostId(
-            @PathVariable Long postId
+    public Api<List<ReplyDTO>> findAllByPostId(
+            @PathVariable Long postId,
+            @PageableDefault(page = 0, size = 10)
+//            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
     ){
-        return replyService.findAllByPostId(postId)
-                .stream()
-                .map(replyConverter::toDto)
-                .collect(Collectors.toList());
+        return replyService.findAllByPostId(pageable, postId);
     }
 
     @PostMapping("/delete")
-    public void delete(
+    public Api delete(
             @RequestBody ReplyView replyView
     ){
-        replyService.delete(replyView);
+        return replyService.delete(replyView);
     }
 }
