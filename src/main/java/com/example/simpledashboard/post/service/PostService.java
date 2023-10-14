@@ -20,7 +20,7 @@ public class PostService {
             Post post
     ){
         var entity = PostEntity.builder()
-                .boardId(1L) // --> 임시로 고정
+                .boardId(post.getBoardId())
                 .userName(post.getUserName())
                 .password(post.getPassword())
                 .email(post.getEmail())
