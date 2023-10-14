@@ -3,8 +3,11 @@ package com.example.simpledashboard.board.controller;
 import com.example.simpledashboard.board.model.Board;
 import com.example.simpledashboard.board.model.BoardDTO;
 import com.example.simpledashboard.board.service.BoardService;
+import com.example.simpledashboard.common.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +22,7 @@ public class BoardApiController {
     private final BoardService boardService;
 
     @PostMapping("/add")
-    public BoardDTO create(
+    public Api<BoardDTO> create(
             @Valid
             @RequestBody
             Board board
@@ -28,7 +31,7 @@ public class BoardApiController {
     }
 
     @GetMapping("/view/{boardId}")
-    public BoardDTO view(
+    public Api<BoardDTO> view(
             @PathVariable Long boardId
     ){
         var entity = boardService.view(boardId);
@@ -37,15 +40,19 @@ public class BoardApiController {
     }
 
     @GetMapping("/list")
-    public List<BoardDTO> list(){
+    public Api<List<BoardDTO>> list(
+            @PageableDefault(page = 0, size = 10)
+//            @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ){
 
-        return boardService.findAllByStatusOrderById();
+        return boardService.findAllByStatusOrderById(pageable);
     }
 
     @DeleteMapping("/delete/{boardId}")
-    public void delete(
+    public Api delete(
             @PathVariable Long boardId
     ){
-        boardService.delete(boardId);
+        return boardService.delete(boardId);
     }
 }

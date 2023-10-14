@@ -54,7 +54,7 @@ public class PostEntity {
             mappedBy = "post"
     )
     @Builder.Default
-//    @Where(clause = "status = 'REGISTERED'") // where annotation으로 필터링 가능하다.
-//    @org.hibernate.annotations.OrderBy(clause = "id desc")
+    @Where(clause = "status = 'REGISTERED'") // where annotation으로 필터링 가능하다.
+    @org.hibernate.annotations.OrderBy(clause = "id desc")
     private List<ReplyEntity> replyList = List.of();
 }

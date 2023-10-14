@@ -18,7 +18,7 @@ public class ReplyConverter {
                 .postId(replyEntity.getPost().getId())
                 .userName(replyEntity.getUserName())
                 .password(replyEntity.getPassword())
-                .status("REGISTERED")
+                .status(replyEntity.getStatus())
                 .title(replyEntity.getTitle())
                 .content(replyEntity.getContent())
                 .repliedAt(replyEntity.getRepliedAt())

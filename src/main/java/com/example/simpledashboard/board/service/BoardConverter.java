@@ -4,6 +4,7 @@ import com.example.simpledashboard.board.db.BoardEntity;
 import com.example.simpledashboard.board.model.BoardDTO;
 import com.example.simpledashboard.post.service.PostConverter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -17,18 +18,24 @@ public class BoardConverter {
     private final PostConverter postConverter;
 
     public BoardDTO toDto(BoardEntity boardEntity){
+        return getBoardDTO(boardEntity);
+    }
 
-        var postList = Optional.ofNullable(boardEntity.getPostList())
+    public Page<BoardDTO> toDto(Page<BoardEntity> boardEntityPage){
+        return boardEntityPage.map(this::getBoardDTO);
+    }
+
+    private BoardDTO getBoardDTO(BoardEntity x) {
+        var postList = Optional.ofNullable(x.getPostList())
                 .orElseGet(Collections::emptyList)
                 .stream()
                 .map(postConverter::toDto)
                 .collect(Collectors.toList());
 
-
         return BoardDTO.builder()
-                .id(boardEntity.getId())
-                .boardName(boardEntity.getBoardName())
-                .status(boardEntity.getStatus())
+                .id(x.getId())
+                .boardName(x.getBoardName())
+                .status(x.getStatus())
                 .postList(postList)
                 .build();
     }

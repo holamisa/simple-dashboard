@@ -1,8 +1,9 @@
 package com.example.simpledashboard.board.db;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
@@ -11,5 +12,5 @@ public interface BoardRepository extends JpaRepository<BoardEntity, Long> {
     public Optional<BoardEntity> findFirstByIdAndStatusOrderByIdDesc(Long id, String status);
 
     // select * from board order by id
-    public List<BoardEntity> findAllByStatusOrderById(String status);
+    public Page<BoardEntity> findAllByStatusOrderById(Pageable pageable, String status);
 }

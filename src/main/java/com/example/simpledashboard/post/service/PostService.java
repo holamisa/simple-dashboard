@@ -52,6 +52,7 @@ public class PostService {
                 .data(postConverter.toDto(saveEntity))
                 .build();
     }
+
     // 1. 게시글 존재?
     // 2. 비밀번호 일치?
     // 3. 해당 댓글에 대한 답변 리스트 조회

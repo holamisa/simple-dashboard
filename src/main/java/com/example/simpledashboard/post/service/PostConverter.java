@@ -38,7 +38,7 @@ public class PostConverter {
                 .userName(x.getUserName())
                 .password(x.getPassword())
                 .email(x.getEmail())
-                .status("REGISTERED")
+                .status(x.getStatus())
                 .title(x.getTitle())
                 .content(x.getContent())
                 .postedAt(x.getPostedAt())

@@ -2,6 +2,7 @@ package com.example.simpledashboard.board.db;
 
 import com.example.simpledashboard.post.db.PostEntity;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,8 +31,8 @@ public class BoardEntity {
             mappedBy = "board"
     )
     @Builder.Default
-//    @Where(clause = "status = 'REGISTERED'") // where annotation으로 필터링 가능하다.
-//    @org.hibernate.annotations.OrderBy(clause = "id desc")
+    @Where(clause = "status = 'REGISTERED'") // where annotation으로 필터링 가능하다.
+    @org.hibernate.annotations.OrderBy(clause = "id desc")
     private List<PostEntity> postList = List.of();
 
 }
