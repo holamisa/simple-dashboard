@@ -1,9 +1,11 @@
 package com.example.simpledashboard.post.db;
 
+import com.example.simpledashboard.reply.db.ReplyEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,4 +44,7 @@ public class PostEntity {
 
     @Column(name = "posted_at", nullable = false)
     private LocalDateTime postedAt;
+
+    @Transient // 컬럼으로 인식 X
+    private List<ReplyEntity> replyList = List.of();
 }
